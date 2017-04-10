@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.17, for macos10.12 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: HospitalServer
 -- ------------------------------------------------------
--- Server version	5.7.17
+-- Server version	5.7.17-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,13 +16,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Medication`
+-- Table structure for table `medication`
 --
 
-DROP TABLE IF EXISTS `Medication`;
+DROP TABLE IF EXISTS `medication`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Medication` (
+CREATE TABLE `medication` (
   `Nonproprietary_Name` varchar(40) NOT NULL,
   `Proprietary_Name` varchar(26) NOT NULL,
   `Labeler` varchar(26) DEFAULT NULL,
@@ -38,22 +38,50 @@ CREATE TABLE `Medication` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Medication`
+-- Dumping data for table `medication`
 --
 
-LOCK TABLES `Medication` WRITE;
-/*!40000 ALTER TABLE `Medication` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Medication` ENABLE KEYS */;
+LOCK TABLES `medication` WRITE;
+/*!40000 ALTER TABLE `medication` DISABLE KEYS */;
+/*!40000 ALTER TABLE `medication` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Pharmacist`
+-- Table structure for table `patient`
 --
 
-DROP TABLE IF EXISTS `Pharmacist`;
+DROP TABLE IF EXISTS `patient`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Pharmacist` (
+CREATE TABLE `patient` (
+  `name` varchar(50) DEFAULT NULL,
+  `gender` enum('M','F') DEFAULT NULL,
+  `MRN` char(7) DEFAULT NULL,
+  `insurance_company` varchar(50) DEFAULT NULL,
+  `id` varchar(10) NOT NULL,
+  `address` varchar(50) DEFAULT NULL,
+  `contact_information` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `patient`
+--
+
+LOCK TABLES `patient` WRITE;
+/*!40000 ALTER TABLE `patient` DISABLE KEYS */;
+/*!40000 ALTER TABLE `patient` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pharmacist`
+--
+
+DROP TABLE IF EXISTS `pharmacist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pharmacist` (
   `Pharmacist_id` int(11) NOT NULL,
   `Name` varchar(50) DEFAULT NULL,
   `Hospital` varchar(30) NOT NULL,
@@ -62,22 +90,101 @@ CREATE TABLE `Pharmacist` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Pharmacist`
+-- Dumping data for table `pharmacist`
 --
 
-LOCK TABLES `Pharmacist` WRITE;
-/*!40000 ALTER TABLE `Pharmacist` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Pharmacist` ENABLE KEYS */;
+LOCK TABLES `pharmacist` WRITE;
+/*!40000 ALTER TABLE `pharmacist` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pharmacist` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Prescription_Item`
+-- Table structure for table `pharmacy_dispense`
 --
 
-DROP TABLE IF EXISTS `Prescription_Item`;
+DROP TABLE IF EXISTS `pharmacy_dispense`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Prescription_Item` (
+CREATE TABLE `pharmacy_dispense` (
+  `dispense_ID` varchar(10) NOT NULL,
+  `pharmacistID` varchar(10) DEFAULT NULL,
+  `prescriptionID` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`dispense_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pharmacy_dispense`
+--
+
+LOCK TABLES `pharmacy_dispense` WRITE;
+/*!40000 ALTER TABLE `pharmacy_dispense` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pharmacy_dispense` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pharmacy_note`
+--
+
+DROP TABLE IF EXISTS `pharmacy_note`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pharmacy_note` (
+  `prescription_item_ID` varchar(10) NOT NULL,
+  `date_and_time` datetime DEFAULT NULL,
+  `issue` varchar(50) DEFAULT NULL,
+  `prescribing_provider` char(10) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `decision` varchar(50) DEFAULT NULL,
+  `date_of_decision` datetime DEFAULT NULL,
+  `pharmacistID` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`prescription_item_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pharmacy_note`
+--
+
+LOCK TABLES `pharmacy_note` WRITE;
+/*!40000 ALTER TABLE `pharmacy_note` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pharmacy_note` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `prescription`
+--
+
+DROP TABLE IF EXISTS `prescription`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prescription` (
+  `medNDC` char(10) NOT NULL,
+  `providerID` char(10) DEFAULT NULL,
+  `date_and_time` datetime DEFAULT NULL,
+  `patientMRN` char(7) DEFAULT NULL,
+  `reason` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`medNDC`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `prescription`
+--
+
+LOCK TABLES `prescription` WRITE;
+/*!40000 ALTER TABLE `prescription` DISABLE KEYS */;
+/*!40000 ALTER TABLE `prescription` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `prescription_item`
+--
+
+DROP TABLE IF EXISTS `prescription_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prescription_item` (
   `itemID` int(11) NOT NULL,
   `startDate` varchar(10) NOT NULL,
   `treatment_Length` varchar(12) DEFAULT NULL,
@@ -91,22 +198,22 @@ CREATE TABLE `Prescription_Item` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Prescription_Item`
+-- Dumping data for table `prescription_item`
 --
 
-LOCK TABLES `Prescription_Item` WRITE;
-/*!40000 ALTER TABLE `Prescription_Item` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Prescription_Item` ENABLE KEYS */;
+LOCK TABLES `prescription_item` WRITE;
+/*!40000 ALTER TABLE `prescription_item` DISABLE KEYS */;
+/*!40000 ALTER TABLE `prescription_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `Provider`
+-- Table structure for table `provider`
 --
 
-DROP TABLE IF EXISTS `Provider`;
+DROP TABLE IF EXISTS `provider`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Provider` (
+CREATE TABLE `provider` (
   `Name` varchar(40) NOT NULL,
   `Provider_type` varchar(12) DEFAULT NULL,
   `Hospital_Dept` varchar(30) NOT NULL,
@@ -117,12 +224,12 @@ CREATE TABLE `Provider` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Provider`
+-- Dumping data for table `provider`
 --
 
-LOCK TABLES `Provider` WRITE;
-/*!40000 ALTER TABLE `Provider` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Provider` ENABLE KEYS */;
+LOCK TABLES `provider` WRITE;
+/*!40000 ALTER TABLE `provider` DISABLE KEYS */;
+/*!40000 ALTER TABLE `provider` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -134,4 +241,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-08 11:06:51
+-- Dump completed on 2017-04-09 20:46:16
